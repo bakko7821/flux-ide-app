@@ -1,43 +1,64 @@
-﻿import { app, BrowserWindow } from "electron";
+﻿import { IPC } from "@flux/shared";
+import { app, BrowserWindow, ipcMain, Menu } from "electron";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { registerIpcHandlers } from "./ipc.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const isDev = !app.isPackaged;
 const DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
 
-async function createWindow() {
+declare const __dirname: string;
+
+function attachWindowIpc(win: BrowserWindow) {
+  // Важно: не через getFocusedWindow()
+  ipcMain.on(IPC.window.minimize, () => {
+    console.log("[main] win:minimize");
+    win.minimize();
+  });
+
+  ipcMain.on(IPC.window.maxToggle, () => {
+    console.log("[main] win:maxToggle");
+    win.isMaximized() ? win.unmaximize() : win.maximize();
+  });
+
+  ipcMain.on(IPC.window.close, () => {
+    console.log("[main] win:close");
+    win.close();
+  });
+}
+
+function createMainWindow() {
   const win = new BrowserWindow({
     width: 1280,
     height: 800,
     backgroundColor: "#0b0f14",
+    frame: false,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "preload.cjs"),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: true
-    }
+      sandbox: false,
+    },
   });
 
-  registerIpcHandlers();
-
   if (isDev && DEV_SERVER_URL) {
-    await win.loadURL(DEV_SERVER_URL);
+    void win.loadURL(DEV_SERVER_URL);
     win.webContents.openDevTools({ mode: "detach" });
   } else {
-    await win.loadFile(path.join(__dirname, "../../ui/dist/index.html"));
+    void win.loadFile(path.join(__dirname, "../../ui/dist/index.html"));
   }
+
+  win.setMenu(null);
+  Menu.setApplicationMenu(null);
+
+  return win;
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  const win = createMainWindow();
+  registerIpcHandlers();
+  attachWindowIpc(win);
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
-});
-
-app.on("activate", () => {
-  if (BrowserWindow.getAllWindows().length === 0) void createWindow();
 });

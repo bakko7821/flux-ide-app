@@ -1,5 +1,6 @@
-﻿import { useEffect, useRef } from "react";
-import * as monaco from "monaco-editor";
+﻿import * as monaco from "monaco-editor";
+import { useEffect, useRef } from "react";
+import "./monacoWorkers";
 
 type Props = {
   value: string;
@@ -7,7 +8,11 @@ type Props = {
   language?: string;
 };
 
-export default function MonacoEditor({ value, onChange, language = "typescript" }: Props) {
+export default function MonacoEditor({
+  value,
+  onChange,
+  language = "typescript",
+}: Props) {
   const elRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const modelRef = useRef<monaco.editor.ITextModel | null>(null);
@@ -21,7 +26,7 @@ export default function MonacoEditor({ value, onChange, language = "typescript" 
       model: modelRef.current,
       automaticLayout: true,
       fontSize: 14,
-      minimap: { enabled: true }
+      minimap: { enabled: true },
     });
 
     const sub = editorRef.current.onDidChangeModelContent(() => {

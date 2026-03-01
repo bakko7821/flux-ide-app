@@ -13,6 +13,6 @@ export function registerIpcHandlers() {
     async (_evt, args: { path: string; text: string }) => {
       await writeFile(args.path, args.text, "utf-8");
       return { ok: true as const };
-    }
+    },
   );
 }
