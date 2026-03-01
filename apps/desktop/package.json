@@ -1,0 +1,19 @@
+{
+  "name": "desktop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "electron .",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "private": "true",
+  "type": "module",
+  "dependencies": {
+    "@flux/shared": "file:../../packages/shared"
+  }
+}
