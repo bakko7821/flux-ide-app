@@ -2,6 +2,7 @@
 import { app, BrowserWindow, ipcMain, Menu } from "electron";
 import path from "node:path";
 import { registerIpcHandlers } from "./ipc.js";
+import { registerThemeIpc } from "./ipc/theme.js";
 
 const isDev = !app.isPackaged;
 const DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
@@ -16,14 +17,20 @@ function attachWindowIpc(win: BrowserWindow) {
   });
 
   ipcMain.on(IPC.window.maxToggle, () => {
-    console.log("[main] win:maxToggle");
     win.isMaximized() ? win.unmaximize() : win.maximize();
   });
+
+  win.on("maximize", () => emitMaximizedChanged(win));
+  win.on("unmaximize", () => emitMaximizedChanged(win));
 
   ipcMain.on(IPC.window.close, () => {
     console.log("[main] win:close");
     win.close();
   });
+}
+
+function emitMaximizedChanged(win: BrowserWindow) {
+  win.webContents.send("window:maximizedChanged", win.isMaximized());
 }
 
 function createMainWindow() {
@@ -53,8 +60,17 @@ function createMainWindow() {
   return win;
 }
 
+let win: BrowserWindow | null = null;
+
 app.whenReady().then(() => {
-  const win = createMainWindow();
+  win = createMainWindow();
+
+  ipcMain.handle("window:isMaximized", () => {
+    if (!win || win.isDestroyed()) return false;
+    return win.isMaximized();
+  });
+
+  registerThemeIpc(() => win);
   registerIpcHandlers();
   attachWindowIpc(win);
 });

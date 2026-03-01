@@ -1,68 +1,60 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+@config "../tailwind.config.js";
+@import "tailwindcss";
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  cursor: pointer !important;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* 🌕 Light (default) */
+:root {
+  /* surfaces */
+  --bg: 245 247 250; /* #F5F7FA */
+  --panel: 255 255 255; /* #FFFFFF */
+  --panel-2: 238 241 245; /* #EEF1F5 */
+
+  /* border */
+  --border: 220 225 231; /* #DCE1E7 */
+
+  /* text */
+  --fg: 26 31 43; /* #1A1F2B */
+  --muted: 75 85 99; /* #4B5563 */
+  --disabled: 156 163 175; /* #9CA3AF */
+
+  /* status */
+  --success: 22 163 74; /* #16A34A */
+  --warning: 202 138 4; /* #CA8A04 */
+  --error: 220 38 38; /* #DC2626 */
+  --info: 2 132 199; /* #0284C7 */
+
+  /* brand (Flux light accent) */
+  --accent: 0 177 64; /* #00B140 */
+  --accent-hover: 0 209 79; /* #00D14F */
+  --accent-pressed: 0 154 56; /* #009A38 */
+}
+
+/* 🌑 Dark theme */
+.dark {
+  /* surfaces */
+  --bg: 15 17 21; /* #0F1115 */
+  --panel: 24 28 35; /* #181C23 */
+  --panel-2: 31 36 48; /* #1F2430 */
+
+  /* border */
+  --border: 42 47 58; /* #2A2F3A */
+
+  /* text */
+  --fg: 230 237 243; /* #E6EDF3 */
+  --muted: 157 167 179; /* #9DA7B3 */
+  --disabled: 92 102 115; /* #5C6673 */
+
+  /* status */
+  --success: 34 197 94; /* #22C55E */
+  --warning: 250 204 21; /* #FACC15 */
+  --error: 239 68 68; /* #EF4444 */
+  --info: 56 189 248; /* #38BDF8 */
+
+  /* brand (Flux dark accent) */
+  --accent: 57 255 20; /* #39FF14 */
+  --accent-hover: 0 209 79; /* #00D14F */
+  --accent-pressed: 0 154 56; /* #009A38 */
 }

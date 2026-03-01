@@ -13,20 +13,33 @@ const api = {
   },
 
   window: {
-    minimize: () => {
-      console.log("minimize click -> send");
-      ipcRenderer.send(IPC.window.minimize);
-    },
-    maximizeToggle: () => {
-      console.log("maxToggle click -> send");
-      ipcRenderer.send(IPC.window.maxToggle);
-    },
-    close: () => {
-      console.log("close click -> send");
-      ipcRenderer.send(IPC.window.close);
+    minimize: () => ipcRenderer.send(IPC.window.minimize),
+    maximizeToggle: () => ipcRenderer.send(IPC.window.maxToggle),
+    close: () => ipcRenderer.send(IPC.window.close),
+
+    isMaximized: () =>
+      ipcRenderer.invoke("window:isMaximized") as Promise<boolean>,
+    onMaximizedChanged: (cb: (v: boolean) => void) => {
+      const handler = (_: unknown, v: boolean) => cb(v);
+      ipcRenderer.on("window:maximizedChanged", handler);
+      return () =>
+        ipcRenderer.removeListener("window:maximizedChanged", handler);
     },
   },
 };
 
 contextBridge.exposeInMainWorld("flux", api);
+
+contextBridge.exposeInMainWorld("theme", {
+  getSystem: () =>
+    ipcRenderer.invoke("theme:getSystem") as Promise<"dark" | "light">,
+  setSource: (source: "system" | "light" | "dark") =>
+    ipcRenderer.invoke("theme:setSource", source) as Promise<"dark" | "light">,
+  onSystemChanged: (cb: (t: "dark" | "light") => void) => {
+    const handler = (_: unknown, t: "dark" | "light") => cb(t);
+    ipcRenderer.on("theme:systemChanged", handler);
+    return () => ipcRenderer.removeListener("theme:systemChanged", handler);
+  },
+});
+
 export type FluxApi = typeof api;
