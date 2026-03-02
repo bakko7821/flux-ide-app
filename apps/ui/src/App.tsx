@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { FolderBar } from "./components/FolderBar";
-import { TitleBar } from "./components/TitleBar";
+import { TitleBar } from "./components/TitleBar/TitleBar";
 import { initSystemThemeSync } from "./utils/theme";
 // import CrossIcon from "../src/assets/icons/ui/CrossFilled.svg"
 

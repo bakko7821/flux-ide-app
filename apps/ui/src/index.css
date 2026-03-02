@@ -9,6 +9,10 @@ body {
   overflow: hidden;
 }
 
+:focus {
+  outline: none;
+}
+
 button {
   cursor: pointer !important;
 }

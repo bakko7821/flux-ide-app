@@ -18,7 +18,7 @@ export function WindowControls() {
   }, []);
 
   return (
-    <div className="titlebar-no-drag flex flex-row items-center justify-center gap-1">
+    <div className="titlebar-no-drag flex flex-row items-center justify-center">
       <button
         className="px-3 py-2 text-muted hover:text-fg hover:bg-panel2 transition-colors"
         onClick={() => window.flux.window.minimize()}
