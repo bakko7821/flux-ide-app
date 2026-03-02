@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import CrossIcon from "../assets/icons/ui/CrossFilled.svg?react";
-import MaximizeIcon from "../assets/icons/ui/Maximize24Regular.svg?react";
+import MaximizeIcon from "../assets/icons/ui/Maximize2.svg?react";
 import MinimizeIcon from "../assets/icons/ui/Minus.svg?react";
 import RestoreIcon from "../assets/icons/ui/WindowRestoreLine.svg?react";
 
@@ -18,9 +18,9 @@ export function WindowControls() {
   }, []);
 
   return (
-    <div className="flex flex-row items-center justify-center gap-1">
+    <div className="titlebar-no-drag flex flex-row items-center justify-center gap-1">
       <button
-        className="px-3 py-1 text-muted hover:text-fg hover:bg-panel-2 transition-colors"
+        className="px-3 py-2 text-muted hover:text-fg hover:bg-panel2 transition-colors"
         onClick={() => window.flux.window.minimize()}
         aria-label="Minimize"
       >
@@ -28,7 +28,7 @@ export function WindowControls() {
       </button>
 
       <button
-        className="px-3 py-1 text-muted hover:text-fg hover:bg-panel-2 transition-colors"
+        className="px-3 py-2 text-muted hover:text-fg hover:bg-panel2 transition-colors"
         onClick={() => window.flux.window.maximizeToggle()}
         aria-label={isMaximized ? "Restore" : "Maximize"}
       >
@@ -41,7 +41,7 @@ export function WindowControls() {
 
       <button
         className="
-          px-3 py-1 text-muted
+          px-3 py-2 text-muted
           hover:text-white hover:bg-error
           transition-colors
         "
