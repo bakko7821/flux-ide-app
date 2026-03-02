@@ -48,5 +48,7 @@ export default function MonacoEditor({
     if (m.getValue() !== value) m.setValue(value);
   }, [value]);
 
-  return <div ref={elRef} style={{ width: "100%", height: "100%" }} />;
+  return (
+    <div ref={elRef} style={{ paddingTop: 4, width: "100%", height: "100%" }} />
+  );
 }
