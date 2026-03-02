@@ -1,6 +1,10 @@
 import type { DirNode } from "@flux/shared";
 import { useState } from "react";
+import FolderIcon from "../assets/icons/files/folder.svg?react";
+import OpenFolderIcon from "../assets/icons/files/open-folder.svg?react";
+import ArrowIcon from "../assets/icons/ui/ArrowDown.svg?react";
 import { useEditor } from "../hooks/useEditor";
+import { getFileIconUrl } from "../utils/icons/getFileIconUrl";
 
 function TreeNode({
   node,
@@ -12,25 +16,43 @@ function TreeNode({
   const [open, setOpen] = useState(true);
 
   if (node.type === "file") {
+    const iconUrl = getFileIconUrl(node.ext || node.name);
+
     return (
       <button
-        className="w-full text-left px-2 py-1 rounded hover:bg-white/5 text-sm"
+        className="w-full flex flex-row items-center gap-2 justify-start p-1 rounded hover:bg-muted/5"
         onClick={() => onOpenFile(node.path)}
         title={node.path}
       >
-        {node.name}
+        <img
+          src={iconUrl}
+          className="w-3 h-3 shrink-0"
+          alt=""
+          draggable={false}
+        />
+        <span className="text-muted text-left text-sm truncate">
+          {node.name}
+        </span>
       </button>
     );
   }
 
   return (
-    <div className="pl-2">
+    <div className="">
       <button
-        className="w-full text-left px-2 py-1 rounded hover:bg-white/5 text-sm font-medium"
+        className="w-full flex flex-row items-center justify-start text-left p-1 rounded hover:bg-fg/5 gap-1"
         onClick={() => setOpen((v) => !v)}
         title={node.path}
       >
-        {open ? "📂" : "📁"} {node.name}
+        <ArrowIcon className={`w-3 h-3 text-fg ${!open && "-rotate-90"}`} />
+        <span className="flex flex-row items-center justify-start gap-2">
+          {open ? (
+            <OpenFolderIcon className="w-3 h-3" />
+          ) : (
+            <FolderIcon className="w-3 h-3" />
+          )}
+          <span className="text-sm font-medium text-fg">{node.name}</span>
+        </span>
       </button>
 
       {open && (
@@ -49,11 +71,11 @@ export default function FolderPage() {
     useEditor();
 
   return (
-    <div className="w-72 min-w-72 max-w-72 border-r border-white/10 h-full flex flex-col">
-      <div className="p-2">
-        <p className="uppercase text-base text-muted pl-5">Проводник</p>
+    <div className="w-72 min-w-72 max-w-72 h-full flex flex-col">
+      <div className="flex flex-col">
+        <p className="uppercase text-base text-muted pl-2 p-1">Проводник</p>
         <div
-          className="text-xs text-muted mt-1 truncate"
+          className="bg-bg text-xs text-muted pl-2 truncate p-1"
           title={folderPath ?? ""}
         >
           {folderPath ?? "Папка не выбрана"}
@@ -61,7 +83,7 @@ export default function FolderPage() {
       </div>
 
       {!folderPath || !tree ? (
-        <div className="p-2 flex gap-2">
+        <div className="p-1 px-2 flex gap-2">
           <button
             className="px-3 py-1 rounded-md border border-white/10 hover:bg-white/5"
             onClick={openFolder}
@@ -76,7 +98,7 @@ export default function FolderPage() {
           </button>
         </div>
       ) : (
-        <div className="flex-1 min-h-0 overflow-auto p-2">
+        <div className="treeNode flex-1 min-h-0 overflow-auto p-1 px-2">
           <TreeNode node={tree} onOpenFile={openFileByPath} />
         </div>
       )}

@@ -78,3 +78,17 @@ button {
 .titlebar-no-drag {
   -webkit-app-region: no-drag;
 }
+
+.treeNode::-webkit-scrollbar {
+  width: 4px; /* ширина scrollbar */
+}
+
+.treeNode::-webkit-scrollbar-track {
+  background: transparent; /* цвет дорожки */
+}
+
+.treeNode::-webkit-scrollbar-thumb {
+  background-color: rgb(var(--accent) / 0.3);
+  border-radius: 20px; /* закругления плашки */
+  border: none;
+}
