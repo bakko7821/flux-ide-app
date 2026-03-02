@@ -5,6 +5,7 @@
 
     openFileDialog: "fs:openFileDialog",
     openFolderDialog: "fs:openFolderDialog",
+    readDirTree: "fs:readDirTree",
   },
   window: {
     minimize: "win:minimize",
@@ -13,7 +14,18 @@
   },
 } as const;
 
+export type DirNode =
+  | { type: "dir"; name: string; path: string; children: DirNode[] }
+  | { type: "file"; name: string; path: string; ext: string };
+
 export type IpcInvokeMap = {
+  [IPC.fs.readDirTree]: (args: {
+    root: string;
+    allowedExt?: string[]; // ["ts","tsx","js",...]
+    ignore?: string[]; // ["node_modules",".git",...]
+    maxDepth?: number; // safety
+    maxEntries?: number; // safety
+  }) => Promise<{ tree: DirNode }>;
   [IPC.fs.readTextFile]: (args: { path: string }) => Promise<{ text: string }>;
   [IPC.fs.writeTextFile]: (args: {
     path: string;
