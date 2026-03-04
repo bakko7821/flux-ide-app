@@ -4,14 +4,16 @@ import FileIcon from "../../assets/icons/ui/File.svg?react";
 import SearchIcon from "../../assets/icons/ui/SearchSolid.svg?react";
 import SettingsIcon from "../../assets/icons/ui/Settings.svg?react";
 import UserIcon from "../../assets/icons/ui/User.svg?react";
+import { FolderNavButton } from "./FolderNavButton";
 import { FolderNavLink } from "./FolderNavLink";
 
 type NavItem = {
   id: number;
   title: string;
   hotkey: string;
-  to: string;
+  to?: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
+  modal?: Exclude<ModalType, null>;
 };
 
 const navLinksArray: NavItem[] = [
@@ -35,6 +37,23 @@ const navLinksArray: NavItem[] = [
     hotkey: "Ctrl + Shift + X",
     to: "/extensions",
     icon: ExtensionsIcon,
+  },
+];
+
+const navButtonsArray: NavItem[] = [
+  {
+    id: 0,
+    title: "User",
+    hotkey: "Ctrl + Shift + U",
+    icon: UserIcon,
+    modal: "user",
+  },
+  {
+    id: 1,
+    title: "Settings",
+    hotkey: "Ctrl + Shift + S",
+    icon: SettingsIcon,
+    modal: "settings",
   },
 ];
 
@@ -73,6 +92,7 @@ export const FolderNavMenu = () => {
   const closeModal = () => setOpenModal(null);
 
   const toggleModal = (type: Exclude<ModalType, null>) => {
+    console.log("start togleModal");
     setOpenModal((prev) => (prev === type ? null : type));
   };
 
@@ -96,29 +116,21 @@ export const FolderNavMenu = () => {
             title={navLink.title}
             hotkey={navLink.hotkey}
             icon={navLink.icon}
-            to={navLink.to}
+            to={navLink.to || "/"}
           />
         ))}
       </div>
 
-      <div>
-        <button
-          type="button"
-          onClick={() => toggleModal("user")}
-          className="group p-3 flex items-center justify-center border-l-2 border-transparent transition-colors"
-          aria-expanded={openModal === "user"}
-        >
-          <UserIcon className="w-6 h-6 text-muted group-hover:text-fg" />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => toggleModal("settings")}
-          className="group p-3 flex items-center justify-center border-l-2 border-transparent transition-colors"
-          aria-expanded={openModal === "settings"}
-        >
-          <SettingsIcon className="w-6 h-6 text-muted group-hover:text-fg" />
-        </button>
+      <div className="w-full">
+        {navButtonsArray.map((navButton) => (
+          <FolderNavButton
+            key={navButton.id}
+            title={navButton.title}
+            hotkey={navButton.hotkey}
+            icon={navButton.icon}
+            onClickFunction={() => toggleModal(navButton.modal!)}
+          />
+        ))}
       </div>
 
       {openModal !== null && (
