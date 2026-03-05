@@ -1,5 +1,6 @@
 ﻿import { useEffect } from "react";
 import { TitleBar } from "./components/TitleBar/TitleBar";
+import { Warmup } from "./components/Warmup/Warmup";
 import { EditorProvider } from "./editor/EditorContext";
 import MonacoEditor from "./editor/MonacoEditor";
 import { useEditor } from "./hooks/useEditor";
@@ -50,6 +51,7 @@ export default function App() {
       <div className="w-screen h-screen bg-bg flex flex-col">
         <TitleBar></TitleBar>
         <main className="w-full flex-1 min-h-0 flex flex-row">
+          <Warmup />
           <AppRoutes />
           <EditorPane />
         </main>
