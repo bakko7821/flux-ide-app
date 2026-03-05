@@ -106,5 +106,5 @@ button {
 }
 
 .caret {
-  animation: caretBlink 1s infinite;
+  animation: caretBlink 1300ms infinite;
 }

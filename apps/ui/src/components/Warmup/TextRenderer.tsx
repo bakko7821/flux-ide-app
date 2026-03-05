@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo } from "react";
 
 type Props = {
   text: string;
@@ -6,39 +6,43 @@ type Props = {
   cursorIndex: number;
 };
 
-export const TextRenderer = memo(function TextRenderer({
-  text,
-  input,
-  cursorIndex,
-}: Props) {
-  console.time("TextRenderer render");
-  const chars = useMemo(() => text.split(""), [text]);
+export const TextRenderer = memo(function TextRenderer({ text, input }: Props) {
+  const typed = text.slice(0, input.length);
+  const rest = text.slice(input.length);
 
-  console.timeEnd("TextRenderer render");
+  const typedChars = typed.split("");
+
   return (
-    <p className=" font-mono text-lg leading-relaxed select-none flex flex-wrap items-start justify-start">
-      {chars.map((char, index) => {
-        let color = "text-muted";
-
-        if (index < input.length) {
-          color = input[index] === char ? "text-green-500" : "text-red-500";
-        }
+    <p className="font-mono text-lg leading-relaxed select-none whitespace-pre-wrap">
+      {/* напечатанная часть */}
+      {typedChars.map((char, i) => {
+        const correct = input[i] === char;
 
         return (
-          <span key={index} className="relative">
-            {cursorIndex === index && (
-              <span className="caret absolute -left-0.5 top-0 bottom-0 w-0.5 bg-white animate-pulse" />
-            )}
-
-            <span className={color}>{char === " " ? "\u00A0" : char}</span>
+          <span
+            key={i}
+            className={`inline-block ${correct ? "text-accent" : "text-error"}`}
+          >
+            {char === " " ? "\u00A0" : char}
           </span>
         );
       })}
 
-      {/* курсор если в конце строки */}
-      {cursorIndex === text.length && (
-        <span className="caret w-0.5 bg-white animate-pulse ml-px" />
+      {/* текущий символ + caret */}
+      {rest.length > 0 && (
+        <span className="relative inline-block">
+          {/* caret */}
+          <span className="caret absolute left-0 top-[15%] h-[70%] w-0.5 bg-white animate-pulse pointer-events-none" />
+
+          {/* символ */}
+          <span className="text-muted">
+            {rest[0] === " " ? "\u00A0" : rest[0]}
+          </span>
+        </span>
       )}
+
+      {/* оставшийся текст */}
+      <span className="text-muted">{rest.slice(1)}</span>
     </p>
   );
 });

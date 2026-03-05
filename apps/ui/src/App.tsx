@@ -1,4 +1,4 @@
-﻿import { useEffect } from "react";
+﻿import { useEffect, useState } from "react";
 import { TitleBar } from "./components/TitleBar/TitleBar";
 import { Warmup } from "./components/Warmup/Warmup";
 import { EditorProvider } from "./editor/EditorContext";
@@ -8,6 +8,8 @@ import { AppRoutes } from "./router";
 import { initSystemThemeSync } from "./utils/theme";
 
 export default function App() {
+  const [isVisibleWarmupModal, setIsVisibleWarmupModal] = useState(true);
+
   useEffect(() => {
     let unsub: undefined | (() => void);
     initSystemThemeSync().then((u) => (unsub = u));
@@ -51,7 +53,9 @@ export default function App() {
       <div className="w-screen h-screen bg-bg flex flex-col">
         <TitleBar></TitleBar>
         <main className="w-full flex-1 min-h-0 flex flex-row">
-          <Warmup />
+          {isVisibleWarmupModal && (
+            <Warmup onClose={() => setIsVisibleWarmupModal(false)} />
+          )}
           <AppRoutes />
           <EditorPane />
         </main>

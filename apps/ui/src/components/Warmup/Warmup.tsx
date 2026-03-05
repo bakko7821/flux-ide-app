@@ -1,14 +1,26 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import CrossIcon from "../../assets/icons/ui/CrossFilled.svg?react";
 import { generateText } from "../../utils/warmupWords";
 import { StatsPanel } from "./StatsPanel";
 import { TextRenderer } from "./TextRenderer";
 import { TypingInput } from "./TypingInput";
 
-export const Warmup = () => {
-  console.time("Warmup render");
+interface WarmupProps {
+  onClose: () => void;
+}
+
+export const Warmup = ({ onClose }: WarmupProps) => {
   const [text, setText] = useState(() => generateText(60));
   const [input, setInput] = useState("");
   const [startedAt, setStartedAt] = useState<number | null>(null);
+
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+      onClose();
+    }
+  };
 
   const cursorIndex = input.length;
 
@@ -26,15 +38,23 @@ export const Warmup = () => {
     setStartedAt(null);
   };
 
-  console.time("Warmup render");
-
   return (
-    <div className="absolute left-0 top-0 flex items-center justify-center w-full h-full z-50 bg-bg/60">
-      <div className="flex flex-col gap-6 max-w-4xl mx-auto bg-panel p-3 rounded-2xl">
+    <div
+      onClick={handleBackdropClick}
+      className="absolute left-0 top-0 flex items-center justify-center w-full h-full z-50 bg-bg/80"
+    >
+      <div
+        ref={modalRef}
+        className="flex flex-col gap-3 max-w-4xl mx-auto bg-panel p-3 rounded-2xl"
+      >
+        <div className="w-full flex flex-row items-center justify-between">
+          <p className="text-2xl font-bold text-fg">Разогрев рук.</p>
+          <button onClick={onClose} className="p-2 group transition-colors">
+            <CrossIcon className=" w-6 h-6 text-fg group-hover:text-error transition-colors" />
+          </button>
+        </div>
         <TextRenderer text={text} input={input} cursorIndex={cursorIndex} />
-
         <TypingInput value={input} onChange={handleInput} />
-
         <StatsPanel
           text={text}
           input={input}

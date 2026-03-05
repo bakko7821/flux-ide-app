@@ -14,6 +14,11 @@ export const TypingInput = ({ value, onChange }: Props) => {
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        return;
+      }
+
       const current = valueRef.current;
 
       if (e.key.length === 1) {

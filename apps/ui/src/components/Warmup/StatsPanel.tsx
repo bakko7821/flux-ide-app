@@ -13,7 +13,6 @@ export const StatsPanel = memo(function StatsPanel({
   startedAt,
   onReset,
 }: Props) {
-  console.time("Stats reneder");
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -35,9 +34,8 @@ export const StatsPanel = memo(function StatsPanel({
 
   const wpm = minutes > 0 ? Math.round(correctChars / 5 / minutes) : 0;
 
-  console.timeEnd("Stats reneder");
   return (
-    <div className="flex items-center gap-6 font-mono">
+    <div className="flex items-center gap-6 font-mono text-fg">
       <span>WPM: {wpm}</span>
       <span>Accuracy: {accuracy}%</span>
 
